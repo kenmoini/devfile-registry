@@ -1,8 +1,11 @@
 #!/bin/bash
 
+# Deploy a single DevFile to OpenShift
+# ./cm-builder.sh devfile-cm stacks/kemo-armillary/1.0.0/devfile.yaml | oc apply -f -
+# Deploy a Stack to OpenShift
 # ./cm-builder.sh stack-cm stacks/kemo-armillary/stack.yaml | oc apply -f -
 
-#set -x
+DEVSPACES_NAMESPACE="devspaces"
 
 function readStack {
     STACK_FILE=${1}
@@ -45,16 +48,7 @@ function processDevFile {
     ICON_TYPE=$(curl -XHEAD -s  -w '%{content_type}' $ICON)
 
     cat <<EOF
-[{
-  "displayName": "$DISPLAY_NAME",
-  "description": "$DESCRIPTION",
-  "tags": $TAGS,
-  "url": "$URL",
-  "icon": {
-    "base64data": "$ICON_B64",
-    "mediatype": "$ICON_TYPE"
-  }
-}]
+[{"displayName": "$DISPLAY_NAME", "description": "$DESCRIPTION", "tags": $TAGS, "url": "$URL", "icon": { "base64data": "$ICON_B64", "mediatype": "$ICON_TYPE" }}]
 EOF
 }
 
@@ -65,8 +59,8 @@ function createConfigMapForStack {
     TMP_EMPTY_JSON_FILE=$(mktemp)
     JSON_OUT=$(readStack ${STACK_FILE})
     echo "$JSON_OUT" > $TMP_EMPTY_JSON_FILE
-    oc create configmap ${STACK_PREFIX}${STACK_NAME} -n devspaces -o yaml --dry-run=client --from-file=${STACK_PREFIX}${STACK_NAME}.json=$TMP_EMPTY_JSON_FILE \
-    | yq -rM '.metadata += {"labels": {"app.kubernetes.io/part-of": "che.eclipse.org", "app.kubernetes.io/instance": "devspaces", "app.kubernetes.io/component": "getting-started-samples"}}'
+    oc create configmap ${STACK_PREFIX}${STACK_NAME} -n ${DEVSPACES_NAMESPACE} -o yaml --dry-run=client --from-file=${STACK_PREFIX}${STACK_NAME}.json=$TMP_EMPTY_JSON_FILE \
+    | yq -rM '.metadata += {"labels": {"app.kubernetes.io/part-of": "che.eclipse.org", "app.kubernetes.io/component": "getting-started-samples"}}'
 }
 
 function createConfigMapForDevfile {
@@ -76,8 +70,8 @@ function createConfigMapForDevfile {
     TMP_EMPTY_JSON_FILE=$(mktemp)
     JSON_OUT=$(processDevFile ${DEV_FILE})
     echo "$JSON_OUT" > $TMP_EMPTY_JSON_FILE
-    oc create configmap ${DEV_PREFIX}${DEVFILE_NAME} -n devspaces -o yaml --dry-run=client --from-file=${DEV_PREFIX}${DEVFILE_NAME}.json=$TMP_EMPTY_JSON_FILE \
-    | yq -rM '.metadata += {"labels": {"app.kubernetes.io/part-of": "che.eclipse.org", "app.kubernetes.io/instance": "devspaces", "app.kubernetes.io/component": "getting-started-samples"}}'
+    oc create configmap ${DEV_PREFIX}${DEVFILE_NAME} -n ${DEVSPACES_NAMESPACE} -o yaml --dry-run=client --from-file=${DEV_PREFIX}${DEVFILE_NAME}.json=$TMP_EMPTY_JSON_FILE \
+    | yq -rM '.metadata += {"labels": {"app.kubernetes.io/part-of": "che.eclipse.org", "app.kubernetes.io/component": "getting-started-samples"}}'
 }
 
 if [ "${1}" == "stack" ]; then
