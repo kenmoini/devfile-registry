@@ -1,7 +1,8 @@
 name: kemo-armillary
-description: 'Go is an open source programming language that makes it easy to build simple, reliable, and efficient software.'
-displayName: Go Runtime
+description: 'Complete Armillary development environment'
+displayName: Kemo Armillary
 icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/golang.svg
 versions:
-  - version: 1.0.0
+  - version: 1.0.1
     default: true
+  - version: 1.0.0

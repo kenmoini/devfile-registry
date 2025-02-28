@@ -6,11 +6,15 @@ metadata:
   icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/golang.svg
   tags:
     - Go
-  projectType: Go
-  language: Go
+    - NodeJS
+    - Node
+    - Armillary
+    - Kemo Ventures
+  projectType: Polyglot
+  language: Polyglot
   provider: Ken Moini
   source: https://github.com/kenmoini/devfile-registry/stacks/kemo-armillary
-  version: 1.0.0
+  version: 1.0.1
 projects:
   - name: armillary
     git:
