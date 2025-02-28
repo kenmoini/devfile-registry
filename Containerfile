@@ -21,5 +21,5 @@ USER 1001
 ###################################################
 # Packaging
 FROM quay-ptc.jfrog.lab.kemo.network/devfile/devfile-index-base:next
-COPY --from=builder /build/index.json /index.json
+COPY --from=builder /build/index.json /registry/index.json
 COPY --from=builder /build/stacks /registry/stacks
