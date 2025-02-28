@@ -4,3 +4,4 @@ displayName: Go Runtime
 icon: https://raw.githubusercontent.com/devfile-samples/devfile-stack-icons/main/golang.svg
 versions:
   - version: 1.0.0
+    default: true
