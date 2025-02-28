@@ -1,3 +1,6 @@
+# podman build -t devfile-index -f Containerfile .
+# podman tag devfile-index disconn-harbor.d70.kemo.labs/library/devfile-index:latest
+# podman push disconn-harbor.d70.kemo.labs/library/devfile-index:latest
 ###################################################
 # Build
 FROM registry-access-redhat-ptc.jfrog.lab.kemo.network/ubi8/go-toolset:1.21 AS builder
