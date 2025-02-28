@@ -10,7 +10,7 @@ COPY . /registry
 # Download the registry build tools
 RUN git clone --depth=1 https://github.com/devfile/registry-support.git /registry-support
 # Run the registry build tools
-RUN mkdir /build \
+RUN echo '{}' > /registry/last_modified.json \
  && /registry-support/build-tools/build.sh /registry /build
 # Reset user as non-root
 USER 1001
