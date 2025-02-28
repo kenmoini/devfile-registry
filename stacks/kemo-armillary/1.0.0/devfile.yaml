@@ -9,7 +9,7 @@ metadata:
   projectType: Go
   language: Go
   provider: Ken Moini
-  source: https://github.com/kenmoini/devfile-registry/stacks/kemo-armillary
+  source: https://github.com/kenmoini/devfile-registry/stacks/kemo-armillary/1.0.0/
   version: 1.0.0
 projects:
   - name: armillary

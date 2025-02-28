@@ -13,7 +13,7 @@ metadata:
   projectType: Polyglot
   language: Polyglot
   provider: Ken Moini
-  source: https://github.com/kenmoini/devfile-registry/stacks/kemo-armillary
+  source: https://github.com/kenmoini/devfile-registry/stacks/kemo-armillary/1.0.1/
   version: 1.0.1
 projects:
   - name: armillary

@@ -46,9 +46,10 @@ function processDevFile {
     ICON=$(yq -rM .metadata.icon $DEV_FILE)
     ICON_B64=$(curl -s $ICON | base64 -w0)
     ICON_TYPE=$(curl -XHEAD -s  -w '%{content_type}' $ICON)
+    VERSION=$(yq -rM .metadata.version $DEV_FILE)
 
     cat <<EOF
-[{"displayName": "$DISPLAY_NAME", "description": "$DESCRIPTION", "tags": $TAGS, "url": "$URL", "icon": { "base64data": "$ICON_B64", "mediatype": "$ICON_TYPE" }}]
+[{"displayName": "$DISPLAY_NAME", "description": "v${VERSION} - $DESCRIPTION", "tags": $TAGS, "url": "$URL", "icon": { "base64data": "$ICON_B64", "mediatype": "$ICON_TYPE" }}]
 EOF
 }
 
