@@ -1,0 +1,51 @@
+# [crio.runtime.workloads.podman-devices]
+# activation_annotation = "io.openshift.podman-devices"
+# allowed_annotations = [
+#  "io.kubernetes.cri-o.Devices"
+# ]
+# [crio.runtime]
+# allowed_devices=["/dev/tun","/dev/fuse"]
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-masters-allow-devices
+  labels:
+    machineconfiguration.openshift.io/role: master
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLWRldmljZXNdCmFjdGl2YXRpb25fYW5ub3RhdGlvbiA9ICJpby5vcGVuc2hpZnQucG9kbWFuLWRldmljZXMiCmFsbG93ZWRfYW5ub3RhdGlvbnMgPSBbCiAiaW8ua3ViZXJuZXRlcy5jcmktby5EZXZpY2VzIgpdCltjcmlvLnJ1bnRpbWVdCmFsbG93ZWRfZGV2aWNlcz1bIi9kZXYvdHVuIiwiL2Rldi9mdXNlIl0="
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-devices
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-workers-allow-devices
+  labels:
+    machineconfiguration.openshift.io/role: worker
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLWRldmljZXNdCmFjdGl2YXRpb25fYW5ub3RhdGlvbiA9ICJpby5vcGVuc2hpZnQucG9kbWFuLWRldmljZXMiCmFsbG93ZWRfYW5ub3RhdGlvbnMgPSBbCiAiaW8ua3ViZXJuZXRlcy5jcmktby5EZXZpY2VzIgpdCltjcmlvLnJ1bnRpbWVdCmFsbG93ZWRfZGV2aWNlcz1bIi9kZXYvdHVuIiwiL2Rldi9mdXNlIl0="
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-devices

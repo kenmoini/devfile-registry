@@ -1,0 +1,52 @@
+# [crio.runtime.workloads.podman-tun]
+# activation_annotation = "io.openshift.podman-tun"
+# allowed_annotations = [
+#  "io.kubernetes.cri-o.Devices"
+# ]
+# [crio.runtime]
+# allowed_devices=["/dev/tun"]
+
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-masters-allow-tun
+  labels:
+    machineconfiguration.openshift.io/role: master
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLXR1bl0KYWN0aXZhdGlvbl9hbm5vdGF0aW9uID0gImlvLm9wZW5zaGlmdC5wb2RtYW4tdHVuIgphbGxvd2VkX2Fubm90YXRpb25zID0gWwogImlvLmt1YmVybmV0ZXMuY3JpLW8uRGV2aWNlcyIKXQpbY3Jpby5ydW50aW1lXQphbGxvd2VkX2RldmljZXM9WyIvZGV2L3R1biJd"
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-tun
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-workers-allow-tun
+  labels:
+    machineconfiguration.openshift.io/role: worker
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLXR1bl0KYWN0aXZhdGlvbl9hbm5vdGF0aW9uID0gImlvLm9wZW5zaGlmdC5wb2RtYW4tdHVuIgphbGxvd2VkX2Fubm90YXRpb25zID0gWwogImlvLmt1YmVybmV0ZXMuY3JpLW8uRGV2aWNlcyIKXQpbY3Jpby5ydW50aW1lXQphbGxvd2VkX2RldmljZXM9WyIvZGV2L3R1biJd"
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-tun
