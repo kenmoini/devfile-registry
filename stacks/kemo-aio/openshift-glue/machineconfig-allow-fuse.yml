@@ -1,0 +1,44 @@
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-masters-allow-fuse
+  labels:
+    machineconfiguration.openshift.io/role: master
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLWZ1c2VdCmFjdGl2YXRpb25fYW5ub3RhdGlvbiA9ICJpby5vcGVuc2hpZnQucG9kbWFuLWZ1c2UiCmFsbG93ZWRfYW5ub3RhdGlvbnMgPSBbCiAgImlvLmt1YmVybmV0ZXMuY3JpLW8uRGV2aWNlcyIKXQpbY3Jpby5ydW50aW1lXQphbGxvd2VkX2RldmljZXM9WyIvZGV2L2Z1c2UiXQo="
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-fuse
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  name: 99-workers-allow-fuse
+  labels:
+    machineconfiguration.openshift.io/role: worker
+spec:
+  config:
+    ignition:
+      config: {}
+      security:
+        tls: {}
+      timeouts: {}
+      version: 3.2.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,W2NyaW8ucnVudGltZS53b3JrbG9hZHMucG9kbWFuLWZ1c2VdCmFjdGl2YXRpb25fYW5ub3RhdGlvbiA9ICJpby5vcGVuc2hpZnQucG9kbWFuLWZ1c2UiCmFsbG93ZWRfYW5ub3RhdGlvbnMgPSBbCiAgImlvLmt1YmVybmV0ZXMuY3JpLW8uRGV2aWNlcyIKXQpbY3Jpby5ydW50aW1lXQphbGxvd2VkX2RldmljZXM9WyIvZGV2L2Z1c2UiXQo="
+          mode: 420
+          overwrite: true
+          path: /etc/crio/crio.conf.d/99-podman-fuse

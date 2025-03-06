@@ -1,0 +1,86 @@
+# module nested-podman 1.0;
+
+# require {
+#   type container_t;
+#   type devpts_t;
+#   type tmpfs_t;
+#   type sysfs_t;
+#   type nsfs_t;
+#   class chr_file open;
+#   class filesystem { mount remount unmount };
+# }
+# allow container_t tmpfs_t:filesystem mount;
+# allow container_t devpts_t:filesystem mount;
+# allow container_t devpts_t:filesystem remount;
+# allow container_t devpts_t:chr_file open;
+# allow container_t nsfs_t:filesystem unmount;
+# allow container_t sysfs_t:filesystem remount;
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: worker
+  name: 98-worker-fuse-selinux
+spec:
+  config:
+    ignition:
+      version: 3.1.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,bW9kdWxlIG5lc3RlZC1wb2RtYW4gMS4wOwoKcmVxdWlyZSB7CiAgdHlwZSBjb250YWluZXJfdDsKICB0eXBlIGRldnB0c190OwogIHR5cGUgdG1wZnNfdDsKICB0eXBlIHN5c2ZzX3Q7CiAgdHlwZSBuc2ZzX3Q7CiAgY2xhc3MgY2hyX2ZpbGUgb3BlbjsKICBjbGFzcyBmaWxlc3lzdGVtIHsgbW91bnQgcmVtb3VudCB1bm1vdW50IH07Cn0KYWxsb3cgY29udGFpbmVyX3QgdG1wZnNfdDpmaWxlc3lzdGVtIG1vdW50OwphbGxvdyBjb250YWluZXJfdCBkZXZwdHNfdDpmaWxlc3lzdGVtIG1vdW50OwphbGxvdyBjb250YWluZXJfdCBkZXZwdHNfdDpmaWxlc3lzdGVtIHJlbW91bnQ7CmFsbG93IGNvbnRhaW5lcl90IGRldnB0c190OmNocl9maWxlIG9wZW47CmFsbG93IGNvbnRhaW5lcl90IG5zZnNfdDpmaWxlc3lzdGVtIHVubW91bnQ7CmFsbG93IGNvbnRhaW5lcl90IHN5c2ZzX3Q6ZmlsZXN5c3RlbSByZW1vdW50Ow=="
+          mode: 420
+          overwrite: true
+          path: /etc/nested-podman/nested-podman.te
+    systemd:
+      units:
+      - contents: |
+          [Unit]
+          Description=Modify SeLinux Type container_t to allow devpts_t and tmpfs_t
+          DefaultDependencies=no
+          After=kubelet.service
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=bash -c "/bin/checkmodule -M -m -o /tmp/nested-podman.mod /etc/nested-podman/nested-podman.te && /bin/semodule_package -o /tmp/nested-podman.pp -m /tmp/nested-podman.mod && /sbin/semodule -i /tmp/nested-podman.pp"
+          TimeoutSec=0
+          [Install]
+          WantedBy=multi-user.target
+        enabled: true
+        name: systemd-nested-podman-selinux.service
+---
+apiVersion: machineconfiguration.openshift.io/v1
+kind: MachineConfig
+metadata:
+  labels:
+    machineconfiguration.openshift.io/role: master
+  name: 98-master-fuse-selinux
+spec:
+  config:
+    ignition:
+      version: 3.1.0
+    storage:
+      files:
+        - contents:
+            source: "data:text/plain;charset=utf-8;base64,bW9kdWxlIG5lc3RlZC1wb2RtYW4gMS4wOwoKcmVxdWlyZSB7CiAgdHlwZSBjb250YWluZXJfdDsKICB0eXBlIGRldnB0c190OwogIHR5cGUgdG1wZnNfdDsKICB0eXBlIHN5c2ZzX3Q7CiAgdHlwZSBuc2ZzX3Q7CiAgY2xhc3MgY2hyX2ZpbGUgb3BlbjsKICBjbGFzcyBmaWxlc3lzdGVtIHsgbW91bnQgcmVtb3VudCB1bm1vdW50IH07Cn0KYWxsb3cgY29udGFpbmVyX3QgdG1wZnNfdDpmaWxlc3lzdGVtIG1vdW50OwphbGxvdyBjb250YWluZXJfdCBkZXZwdHNfdDpmaWxlc3lzdGVtIG1vdW50OwphbGxvdyBjb250YWluZXJfdCBkZXZwdHNfdDpmaWxlc3lzdGVtIHJlbW91bnQ7CmFsbG93IGNvbnRhaW5lcl90IGRldnB0c190OmNocl9maWxlIG9wZW47CmFsbG93IGNvbnRhaW5lcl90IG5zZnNfdDpmaWxlc3lzdGVtIHVubW91bnQ7CmFsbG93IGNvbnRhaW5lcl90IHN5c2ZzX3Q6ZmlsZXN5c3RlbSByZW1vdW50Ow=="
+          mode: 420
+          overwrite: true
+          path: /etc/nested-podman/nested-podman.te
+    systemd:
+      units:
+      - contents: |
+          [Unit]
+          Description=Modify SeLinux Type container_t to allow devpts_t and tmpfs_t
+          DefaultDependencies=no
+          After=kubelet.service
+          [Service]
+          Type=oneshot
+          RemainAfterExit=yes
+          ExecStart=bash -c "/bin/checkmodule -M -m -o /tmp/nested-podman.mod /etc/nested-podman/nested-podman.te && /bin/semodule_package -o /tmp/nested-podman.pp -m /tmp/nested-podman.mod && /sbin/semodule -i /tmp/nested-podman.pp"
+          TimeoutSec=0
+          [Install]
+          WantedBy=multi-user.target
+        enabled: true
+        name: systemd-nested-podman-selinux.service
+
