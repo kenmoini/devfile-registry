@@ -1,0 +1,35 @@
+schemaVersion: 2.2.2
+attributes:
+  controller.devfile.io/storage-type: per-workspace
+metadata:
+  name: kemo-aio
+  displayName: Kemo All-in-One
+  description: Default workspace
+  icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/vscode.svg
+  tags:
+    - Go
+    - Python
+    - Ansible
+    - Podman
+    - Node
+  projectType: Polyglot
+  language: Polyglot
+  provider: Ken Moini
+  source: https://github.com/kenmoini/devfile-registry/stacks/kemo-aio/1.0.0/
+  version: 1.0.0
+
+components:
+  - name: podman
+    attributes:
+      pod-overrides: {"metadata": {"annotations": {"io.kubernetes.cri-o.Devices":"/dev/fuse","io.openshift.podman-fuse":""}}}
+    container: 
+      image: quay.io/cgruver0/che/podman-fuse:latest
+      memoryLimit: 6Gi
+      mountSources: true
+      env:
+      - name: VSCODE_DEFAULT_WORKSPACE
+        value: "/projects/che-podman-fuse-demo/podman-fuse-demo.code-workspace"
+
+  - volume:
+      size: 500Gi
+    name: projects

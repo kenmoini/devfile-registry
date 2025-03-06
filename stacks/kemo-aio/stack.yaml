@@ -1,0 +1,7 @@
+name: kemo-aio
+description: 'My default workspace for different things'
+displayName: Kemo Armillary
+icon: https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/vscode.svg
+versions:
+  - version: 1.0.0
+    default: true
