@@ -10,7 +10,7 @@ DEVSPACES_NAMESPACE="devspaces"
 function readStack {
     STACK_FILE=${1}
     STACK_DIR=$(dirname $STACK_FILE)
-    VERSIONS=$(yq -rMcj .versions $STACK_FILE)
+    VERSIONS=$(yq -rM -o=json .versions $STACK_FILE)
     TMP_EMPTY_JSON_FILE=$(mktemp)
     echo '[]' > $TMP_EMPTY_JSON_FILE
 
@@ -41,7 +41,7 @@ function processDevFile {
     DISPLAY_NAME=$(yq -rM .metadata.displayName $DEV_FILE)
     DESCRIPTION=$(yq -rM .metadata.description $DEV_FILE)
     DESCRIPTION=$(yq -rM .metadata.description $DEV_FILE)
-    TAGS=$(yq -rMcj .metadata.tags $DEV_FILE)
+    TAGS=$(yq -rM -o=json .metadata.tags $DEV_FILE)
     URL=$(yq -rM .metadata.source $DEV_FILE)
     ICON=$(yq -rM .metadata.icon $DEV_FILE)
     ICON_B64=$(curl -s $ICON | base64 -w0)
